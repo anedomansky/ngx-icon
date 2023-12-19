@@ -22,7 +22,6 @@
       "source.fixAll.stylelint": "explicit"
     },
     "editor.formatOnSave": true,
-    "jest.autoRun": "off",
     "[json]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
