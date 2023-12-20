@@ -5,11 +5,11 @@ export class SVGIcon {
 
   private _path: SafeResourceUrl;
 
-  private _elementAsText: string | null;
+  private _elementAsString: string | null;
 
-  constructor(path: SafeResourceUrl, elementAsText: string | null) {
+  constructor(path: SafeResourceUrl, elementAsString: string | null) {
     this._path = path;
-    this._elementAsText = elementAsText;
+    this._elementAsString = elementAsString;
   }
 
   set element(element: SVGElement | null) {
@@ -28,11 +28,11 @@ export class SVGIcon {
     return this._path;
   }
 
-  set elementAsText(elementAsText: string | null) {
-    this._elementAsText = elementAsText;
+  set elementAsString(elementAsString: string | null) {
+    this._elementAsString = elementAsString;
   }
 
-  get elementAsText(): string | null {
-    return this._elementAsText;
+  get elementAsString(): string | null {
+    return this._elementAsString;
   }
 }
