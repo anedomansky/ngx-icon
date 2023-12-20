@@ -18,10 +18,8 @@
     ],
     "npm.packageManager": "npm",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.fixAll.stylelint": "explicit"
+      "source.fixAll": "explicit",
     },
-    "editor.formatOnSave": true,
     "[json]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -29,6 +27,9 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[html]": {
+      "editor.defaultFormatter": null
+    },
+    "[typescript]": {
       "editor.defaultFormatter": null
     },
     "search.exclude": {
