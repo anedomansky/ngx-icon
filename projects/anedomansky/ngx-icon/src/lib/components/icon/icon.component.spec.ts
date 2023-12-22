@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IconComponent } from './icon.component';
@@ -8,7 +9,7 @@ describe('IconComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [IconComponent]
+      imports: [IconComponent, HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(IconComponent);
     component = fixture.componentInstance;
