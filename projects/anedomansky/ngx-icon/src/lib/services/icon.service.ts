@@ -18,6 +18,14 @@ export class IconService {
 
   private icons = new Map<string, SVGIcon>();
 
+  /**
+   * Adds a new icon to the service's map.
+   * The service automatically adds the `.svg`-suffix.
+   *
+   * @param name The icon's name
+   * @param path The asset path
+   * @example `this.iconService.addIcon('camera', ''assets/')
+   */
   addIcon(name: string, path: SafeResourceUrl): void {
     this.icons.set(
       name,
@@ -28,6 +36,14 @@ export class IconService {
     );
   }
 
+  /**
+   * The specified SVG icon has to be added via `addIcon()` before accessing it with this function.
+   * Otherwise it throws an error.
+   *
+   * @param name The icon's name
+   * @returns The specified SVG icon wrapped in an `Observable`
+   * @throws
+   */
   getIcon(name: string): Observable<SVGElement> {
     const icon = this.icons.get(name);
 
@@ -40,6 +56,12 @@ export class IconService {
     );
   }
 
+  /**
+   * Creates a `SVGElement` from the supplied `string`.
+   *
+   * @param iconAsString The SVG icon as text
+   * @returns The `SVGElement`
+   */
   private createSVGFromString(iconAsString: string): SVGElement {
     const div = this.document.createElement('div');
     div.innerHTML = iconAsString;
@@ -52,10 +74,13 @@ export class IconService {
     return svg;
   }
 
-  private prepareCachedIcon(iconAsString: string): SVGElement {
-    return this.createSVGFromString(iconAsString);
-  }
-
+  /**
+   * Fetches the file contents of the specified icon.
+   *
+   * @param icon The `SVGIcon`
+   * @returns The file contents wrapped in an `Observable`
+   * @throws
+   */
   private fetchIcon(icon: SVGIcon): Observable<string> {
     const { path } = icon;
 
@@ -74,6 +99,11 @@ export class IconService {
     return this.httpClient.get(safePath, { responseType: 'text' });
   }
 
+  /**
+   * Returns the already transformed `SVGElement` or creates the `SVGElement` from the previously fetched `string`.
+   * @param icon The `SVGIcon`
+   * @returns The `SVGElement`
+   */
   private transformStringToSVGElement(icon: SVGIcon): SVGElement {
     if (!icon.element) {
       icon.element = this.createSVGFromString(icon.elementAsString ?? '');
@@ -84,9 +114,15 @@ export class IconService {
     return icon.element;
   }
 
+  /**
+   * Returns the already cached icon or fetches it via the previously specified `path`.
+   *
+   * @param icon The `SVGIcon`
+   * @returns The SVG icon wrapped in an `Observable`
+   */
   private loadIcon(icon: SVGIcon): Observable<SVGElement> {
     if (icon.elementAsString) {
-      return of(this.prepareCachedIcon(icon.elementAsString));
+      return of(this.createSVGFromString(icon.elementAsString));
     }
 
     return this.fetchIcon(icon).pipe(

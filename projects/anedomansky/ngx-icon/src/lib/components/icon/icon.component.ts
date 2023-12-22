@@ -18,6 +18,7 @@ import { IconService } from '../../services/icon.service';
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // TODO: ViewEncapsulation.NONE ?
 })
 export class IconComponent implements OnDestroy {
   private readonly iconService = inject(IconService);
@@ -26,6 +27,9 @@ export class IconComponent implements OnDestroy {
 
   private readonly renderer = inject(Renderer2);
 
+  /**
+   * Used in order to 'abort' pending icon fetches if the component is destroyed while fetching an icon.
+   */
   private iconFetch = Subscription.EMPTY;
 
   @Input()
@@ -43,6 +47,11 @@ export class IconComponent implements OnDestroy {
     this.iconFetch.unsubscribe();
   }
 
+  /**
+   * Removes the SVG and all other non-element nodes and replaces them with the new SVG.
+   *
+   * @param svg The SVGElement to be displayed
+   */
   private updateSVGElement(svg: SVGElement): void {
     let existingChildrenCount = this.elementRef.nativeElement.childNodes.length;
 
@@ -50,6 +59,7 @@ export class IconComponent implements OnDestroy {
       const child =
         this.elementRef.nativeElement.childNodes[existingChildrenCount];
 
+      // only remove non element nodes and 'svg' nodes
       if (child.nodeType !== 1 || child.nodeName.toLowerCase() === 'svg') {
         this.renderer.removeChild(this.elementRef.nativeElement, child);
       }
@@ -58,6 +68,11 @@ export class IconComponent implements OnDestroy {
     this.renderer.appendChild(this.elementRef.nativeElement, svg);
   }
 
+  /**
+   * Creates the icon with the specified `name`.
+   *
+   * @param name The icon's name
+   */
   private createSVG(name: string): void {
     this.iconFetch = this.iconService
       .getIcon(name)
