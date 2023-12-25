@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 
 import { SVGIcon } from '../models/SVGIcon';
@@ -26,7 +26,7 @@ export class IconService {
    * @param path The asset path
    * @example `this.iconService.addIcon('camera', ''assets/')
    */
-  addIcon(name: string, path: SafeResourceUrl): void {
+  addIcon(name: string, path: string): void {
     this.icons.set(
       name,
       new SVGIcon(
@@ -89,14 +89,7 @@ export class IconService {
       path,
     );
 
-    if (!safePath) {
-      return throwError(
-        () =>
-          new Error(`The path "${safePath}" was not trusted as a resource URL`),
-      );
-    }
-
-    return this.httpClient.get(safePath, { responseType: 'text' });
+    return this.httpClient.get(safePath!, { responseType: 'text' });
   }
 
   /**
@@ -105,11 +98,7 @@ export class IconService {
    * @returns The `SVGElement`
    */
   private transformStringToSVGElement(icon: SVGIcon): SVGElement {
-    if (!icon.element) {
-      icon.element = this.createSVGFromString(icon.elementAsString ?? '');
-
-      return icon.element;
-    }
+    icon.element = this.createSVGFromString(icon.elementAsString!);
 
     return icon.element;
   }
@@ -126,7 +115,7 @@ export class IconService {
     }
 
     return this.fetchIcon(icon).pipe(
-      tap((elementAsString) => (icon.elementAsString = elementAsString ?? '')),
+      tap((elementAsString) => (icon.elementAsString = elementAsString)),
       map(() => this.transformStringToSVGElement(icon)),
     );
   }

@@ -35,6 +35,9 @@ describe('IconService', () => {
     expect(req.request.method).toEqual('GET');
 
     req.flush('<svg></svg>');
+
+    service.getIcon('test').subscribe((svg) => expect(svg).toBe('<svg></svg>'));
+    httpTestingController.expectNone('assets/test.svg');
   });
 
   it('should throw error if non existent SVG is retrieved', (done) => {
