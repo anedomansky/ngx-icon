@@ -9,19 +9,18 @@ import {
 } from '@angular/core';
 import { Subscription, take } from 'rxjs';
 
-import { IconService } from '../../services/icon.service';
+import { NgxIconService } from '../../services/icon.service';
 
 @Component({
-  selector: 'ngx-icon-icon',
+  selector: 'ngx-icon',
   standalone: true,
   imports: [],
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // TODO: ViewEncapsulation.NONE ?
 })
-export class IconComponent implements OnDestroy {
-  private readonly iconService = inject(IconService);
+export class NgxIconComponent implements OnDestroy {
+  private readonly iconService = inject(NgxIconService);
 
   private readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef);
 

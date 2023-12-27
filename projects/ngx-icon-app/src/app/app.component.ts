@@ -1,4 +1,4 @@
-import { IconComponent } from '@anedomansky/ngx-icon';
+import { NgxIconComponent } from '@anedomansky/ngx-icon';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [IconComponent],
+  imports: [NgxIconComponent],
 })
 export class AppComponent {}

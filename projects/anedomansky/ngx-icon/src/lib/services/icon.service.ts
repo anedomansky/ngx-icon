@@ -9,7 +9,7 @@ import { SVGIcon } from '../models/SVGIcon';
 @Injectable({
   providedIn: 'root',
 })
-export class IconService {
+export class NgxIconService {
   private readonly httpClient = inject(HttpClient);
 
   private readonly document = inject(DOCUMENT);

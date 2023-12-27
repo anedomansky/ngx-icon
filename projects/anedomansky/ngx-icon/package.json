@@ -1,7 +1,7 @@
 {
   "name": "@anedomansky/ngx-icon",
   "version": "0.0.1",
-  "description": "An Angular Library",
+  "description": "An Angular component for displaying SVG icons.",
   "scripts": {
     "build": "ng build @anedomansky/ngx-icon",
     "prepublishOnly": "npm run build"
