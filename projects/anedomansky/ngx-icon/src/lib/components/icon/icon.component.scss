@@ -1,0 +1,11 @@
+:host {
+  --ngx-icon-size: 1rem;
+
+  display: inline-block;
+  height: var(--ngx-icon-size);
+  width: auto;
+
+  ::ng-deep svg {
+    height: 100%;
+  }
+}
