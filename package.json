@@ -1,6 +1,6 @@
 {
   "name": "ngx-icon",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "start": "ng serve",
     "build": "ng build ngx-icon-app",
