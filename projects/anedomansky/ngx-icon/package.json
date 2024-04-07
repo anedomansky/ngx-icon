@@ -2,7 +2,7 @@
   "name": "@anedomansky/ngx-icon",
   "version": "1.1.0",
   "description": "An Angular component for displaying SVG icons.",
-  "author": "Alexander Nedomansky <nedomanskya@outlook.com>",
+  "author": "Alexander Nedomansky <anedomansky@gmail.com>",
   "license": "MIT",
   "keywords": [
     "angular",
