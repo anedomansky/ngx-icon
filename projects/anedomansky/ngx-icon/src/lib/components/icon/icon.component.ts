@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Subscription, take } from 'rxjs';
 
-import { NgxIconService } from '../../services/icon.service';
+import { NgxIconService } from './icon.service';
 
 @Component({
   selector: 'ngx-icon',

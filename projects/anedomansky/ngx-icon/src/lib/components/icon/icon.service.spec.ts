@@ -4,17 +4,17 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { IconService } from './icon.service';
+import { NgxIconService } from './icon.service';
 
 describe('IconService', () => {
-  let service: IconService;
+  let service: NgxIconService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(IconService);
+    service = TestBed.inject(NgxIconService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -42,20 +42,26 @@ describe('IconService', () => {
 
   it('should throw error if non existent SVG is retrieved', (done) => {
     service.addIcon('test', 'assets/');
-    service.getIcon('notExisting').subscribe({ error: (err) => {
-      expect(err.message).toBe('Unable to find icon with the name "notExisting"');
-      done();
-    }});
+    service.getIcon('notExisting').subscribe({
+      error: (err) => {
+        expect(err.message).toBe(
+          'Unable to find icon with the name "notExisting"',
+        );
+        done();
+      },
+    });
 
     httpTestingController.expectNone('assets/notExisting.svg');
   });
 
   it('should throw error if SVG file does not contain a <svg> element', (done) => {
     service.addIcon('test', 'assets/');
-    service.getIcon('test').subscribe({ error: (err) => {
-      expect(err.message).toBe('<svg> not found');
-      done();
-    }});
+    service.getIcon('test').subscribe({
+      error: (err) => {
+        expect(err.message).toBe('<svg> not found');
+        done();
+      },
+    });
 
     const req = httpTestingController.expectOne('assets/test.svg');
     expect(req.request.method).toEqual('GET');

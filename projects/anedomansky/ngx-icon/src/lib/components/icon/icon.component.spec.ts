@@ -2,15 +2,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { IconService } from '../../services/icon.service';
-import { IconComponent } from './icon.component';
+import { NgxIconComponent } from './icon.component';
+import { NgxIconService } from './icon.service';
 
 describe('IconComponent', () => {
-  let component: IconComponent;
-  let fixture: ComponentFixture<IconComponent>;
-  let iconService: IconService;
+  let component: NgxIconComponent;
+  let fixture: ComponentFixture<NgxIconComponent>;
+  let iconService: NgxIconService;
   let element: HTMLElement;
-  const iconServiceStub: Partial<IconService> = {
+  const iconServiceStub: Partial<NgxIconService> = {
     addIcon: () => {},
     getIcon: () => {
       const div = document.createElement('div');
@@ -22,16 +22,16 @@ describe('IconComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [IconComponent, HttpClientTestingModule],
+      imports: [NgxIconComponent, HttpClientTestingModule],
       providers: [
         {
-          provide: IconService,
+          provide: NgxIconService,
           useValue: iconServiceStub,
         },
       ],
     });
-    fixture = TestBed.createComponent(IconComponent);
-    iconService = TestBed.inject(IconService);
+    fixture = TestBed.createComponent(NgxIconComponent);
+    iconService = TestBed.inject(NgxIconService);
     component = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;
     fixture.detectChanges();

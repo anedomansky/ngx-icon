@@ -2,9 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { map, Observable, of, tap, throwError } from 'rxjs';
+import { map, Observable, shareReplay, throwError } from 'rxjs';
 
-import { SVGIcon } from '../models/SVGIcon';
+import { SVGIcon } from './icon.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,12 +18,13 @@ export class NgxIconService {
 
   private icons = new Map<string, SVGIcon>();
 
+  private cache = new Map<string, Observable<SVGElement>>();
+
   /**
-   * Adds a new icon to the service's map.
-   * The service automatically adds the `.svg`-suffix.
+   * Registers an icon by URL.
    *
-   * @param name The icon's name
-   * @param path The asset path
+   * @param name name for the icon
+   * @param path path to the svg-file
    * @example `this.iconService.addIcon('camera', ''assets/')
    */
   addIcon(name: string, path: string): void {
@@ -31,7 +32,6 @@ export class NgxIconService {
       name,
       new SVGIcon(
         this.sanitizer.bypassSecurityTrustResourceUrl(`${path}${name}.svg`),
-        null,
       ),
     );
   }
@@ -75,13 +75,12 @@ export class NgxIconService {
   }
 
   /**
-   * Fetches the file contents of the specified icon.
+   * Returns the already cached icon or fetches it via the previously specified `path`.
    *
    * @param icon The `SVGIcon`
-   * @returns The file contents wrapped in an `Observable`
-   * @throws
+   * @returns The SVG icon wrapped in an `Observable`
    */
-  private fetchIcon(icon: SVGIcon): Observable<string> {
+  private loadIcon(icon: SVGIcon): Observable<SVGElement> {
     const { path } = icon;
 
     const safePath = this.sanitizer.sanitize(
@@ -89,34 +88,19 @@ export class NgxIconService {
       path,
     );
 
-    return this.httpClient.get(safePath!, { responseType: 'text' });
-  }
-
-  /**
-   * Returns the already transformed `SVGElement` or creates the `SVGElement` from the previously fetched `string`.
-   * @param icon The `SVGIcon`
-   * @returns The `SVGElement`
-   */
-  private transformStringToSVGElement(icon: SVGIcon): SVGElement {
-    icon.element = this.createSVGFromString(icon.elementAsString!);
-
-    return icon.element;
-  }
-
-  /**
-   * Returns the already cached icon or fetches it via the previously specified `path`.
-   *
-   * @param icon The `SVGIcon`
-   * @returns The SVG icon wrapped in an `Observable`
-   */
-  private loadIcon(icon: SVGIcon): Observable<SVGElement> {
-    if (icon.elementAsString) {
-      return of(this.createSVGFromString(icon.elementAsString));
+    if (safePath && !this.cache.has(safePath)) {
+      this.cache.set(
+        safePath,
+        this.httpClient.get(safePath, { responseType: 'text' }).pipe(
+          shareReplay(1),
+          map((iconAsString) => this.createSVGFromString(iconAsString)),
+        ),
+      );
     }
 
-    return this.fetchIcon(icon).pipe(
-      tap((elementAsString) => (icon.elementAsString = elementAsString)),
-      map(() => this.transformStringToSVGElement(icon)),
+    return (
+      this.cache.get(safePath!) ??
+      throwError(() => new Error(`The path "${path}" is not cached.`))
     );
   }
 }
